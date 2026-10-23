@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gemini Chatbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="chat">
+      <header class="chat__header">
+        <div>
+          <h1>Gemini Chatbot</h1>
+          <p>Koi bhi sawal poochein, Urdu ya English mein.</p>
+        </div>
+        <button id="clear-btn" type="button" class="btn-ghost">Chat saaf karein</button>
+      </header>
+
+      <section id="messages" class="messages" aria-live="polite"></section>
+
+      <form id="chat-form" class="composer">
+        <label for="input" class="sr-only">Aap ka message</label>
+        <textarea
+          id="input"
+          rows="1"
+          maxlength="2000"
+          placeholder="Apna sawal yahan likhein..."
+          required
+        ></textarea>
+        <button id="send-btn" type="submit">Bhejein</button>
+      </form>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

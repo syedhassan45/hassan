@@ -1,0 +1,9 @@
+{
+  "name": "gemini-chatbot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simple Gemini chatbot with HTML, CSS, Vanilla JS and a Vercel serverless function",
+  "engines": {
+    "node": ">=18"
+  }
+}
