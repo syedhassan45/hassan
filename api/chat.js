@@ -64,11 +64,13 @@ module.exports = async function handler(req, res) {
 
     const data = await geminiResponse.json();
 
-    if (!geminiResponse.ok) {
+       if (!geminiResponse.ok) {
       console.error("Gemini API error:", data);
-      return res.status(502).json({
-        error: "Gemini API ne error diya. Thori der baad dobara try karein.",
-      });
+      const detail =
+        data && data.error && data.error.message
+          ? data.error.message
+          : "Unknown error";
+      return res.status(502).json({ error: "Gemini error: " + detail });
     }
 
     if (data.promptFeedback && data.promptFeedback.blockReason) {
