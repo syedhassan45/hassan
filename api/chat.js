@@ -6,6 +6,7 @@ const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL
 
 const MAX_MESSAGES = 20; // sirf aakhri 20 messages bhejte hain
 const MAX_TEXT_LENGTH = 2000; // har message ki max length
+const TIMEOUT_MS = 25000; // 25 second baad intezar band
 
 const SYSTEM_PROMPT =
   "You are a friendly, helpful assistant. Reply in the same language the user writes in " +
@@ -48,9 +49,13 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: "Aakhri message user ka hona chahiye." });
   }
 
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
   try {
     const geminiResponse = await fetch(API_URL, {
       method: "POST",
+      signal: controller.signal,
       headers: {
         "Content-Type": "application/json",
         "x-goog-api-key": apiKey,
@@ -63,8 +68,9 @@ module.exports = async function handler(req, res) {
     });
 
     const data = await geminiResponse.json();
+    clearTimeout(timer);
 
-       if (!geminiResponse.ok) {
+    if (!geminiResponse.ok) {
       console.error("Gemini API error:", data);
       const detail =
         data && data.error && data.error.message
@@ -100,7 +106,15 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({ reply });
   } catch (error) {
+    clearTimeout(timer);
     console.error("Server error:", error);
+
+    if (error.name === "AbortError") {
+      return res.status(504).json({
+        error: "Jawab bohat der se aa raha hai. Dobara koshish karein.",
+      });
+    }
+
     return res.status(500).json({ error: "Server mein masla aa gaya." });
   }
 };
